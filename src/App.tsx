@@ -18,6 +18,7 @@ const client = new TelegramClient(SESSION, API_ID, API_HASH, {
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [wasCodeSent, setWasCodeSent] = useState(false);
+  const [pass, setPass] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [phoneNum, setPhoneNum] = useState("");
   const [code, setCode] = useState("");
@@ -61,6 +62,7 @@ function App() {
       setLoadingStep("code");
       await client.start({
         phoneNumber: phoneNum,
+        password: userAuthParamCallback(pass),
         phoneCode: userAuthParamCallback(code),
         onError: (e) => {
           console.log(e);
@@ -169,6 +171,13 @@ function App() {
       <Button onClick={sendCodeHandler} isLoading={loadingStep === "phone"}>
         Request a Code
       </Button>
+
+      <Input
+        value={pass}
+        onChange={(e) => setPass(e.target.value)}
+        placeholder={"password"}
+        disabled={!wasCodeSent}
+      />
       <Input
         value={code}
         onChange={(e) => setCode(e.target.value)}
